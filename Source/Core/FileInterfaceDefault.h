@@ -49,7 +49,7 @@ public:
 	/// Opens a file.		
 	/// @param path The path of the file to open.		
 	/// @return A valid file handle, or nullptr on failure
-	FileHandle Open(const String& path) override;
+	FileHandle Open(const String& path, FileInterface::OpenMode mode) override;
 	/// Closes a previously opened file.
 	/// @param file The file handle previously opened through Open().
 	void Close(FileHandle file) override;

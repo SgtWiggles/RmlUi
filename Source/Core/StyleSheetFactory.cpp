@@ -190,7 +190,7 @@ UniquePtr<const StyleSheetContainer> StyleSheetFactory::LoadStyleSheetContainer(
 
 	// Open stream, construct new sheet and pass the stream into the sheet
 	auto stream = MakeUnique<StreamFile>();
-	if (stream->Open(sheet))
+	if (stream->Open(sheet, FileInterface::MODE_READ))
 	{
 		new_style_sheet = MakeUnique<StyleSheetContainer>();
 		if (!new_style_sheet->LoadStyleSheetContainer(stream.get()))

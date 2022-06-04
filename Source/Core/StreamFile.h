@@ -45,7 +45,7 @@ public:
 	virtual ~StreamFile();
 
 	/// Attempts to open the stream pointing at a given location.
-	bool Open(const String& path);
+	bool Open(const String& path, FileInterface::OpenMode mode);
 	/// Closes the stream.
 	void Close() override;
 

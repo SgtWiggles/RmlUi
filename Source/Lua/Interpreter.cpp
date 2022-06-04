@@ -78,7 +78,7 @@ bool Interpreter::LoadFile(const String& file)
 
     //use the file interface to get the contents of the script
     FileInterface* file_interface = GetFileInterface();
-    FileHandle handle = file_interface->Open(file);
+    FileHandle handle = file_interface->Open(file, FileInterface::MODE_EXEC);
     if (handle == 0) {
         Log::Message(Log::LT_WARNING, "LoadFile: Unable to open file: %s", file.c_str());
         return false;

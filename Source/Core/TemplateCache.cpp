@@ -73,7 +73,7 @@ Template* TemplateCache::LoadTemplate(const String& name)
 	// Nope, we better load it
 	Template* new_template = nullptr;
 	auto stream = MakeUnique<StreamFile>();
-	if (stream->Open(name))
+	if (stream->Open(name, FileInterface::MODE_EXEC))
 	{
 		new_template = new Template();
 		if (!new_template->Load(stream.get()))

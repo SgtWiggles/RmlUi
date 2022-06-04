@@ -49,9 +49,9 @@ size_t FileInterface::Length(FileHandle file)
     return length;
 }
 
-bool FileInterface::LoadFile(const String& path, String& out_data)
+bool FileInterface::LoadFile(const String& path, FileInterface::OpenMode mode, String& out_data)
 {
-	FileHandle handle = Open(path);
+	FileHandle handle = Open(path, mode);
 	if (!handle)
 		return false;
 

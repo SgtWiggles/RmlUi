@@ -34,7 +34,7 @@ ShellFileInterface::ShellFileInterface(const Rml::String& root) : root(root) {}
 ShellFileInterface::~ShellFileInterface() {}
 
 // Opens a file.
-Rml::FileHandle ShellFileInterface::Open(const Rml::String& path)
+Rml::FileHandle ShellFileInterface::Open(const Rml::String& path, FileInterface::OpenMode mode)
 {
 	// Attempt to open the file relative to the application's root.
 	FILE* fp = fopen((root + path).c_str(), "rb");

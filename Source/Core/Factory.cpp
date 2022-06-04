@@ -543,7 +543,7 @@ SharedPtr<StyleSheetContainer> Factory::InstanceStyleSheetString(const String& s
 SharedPtr<StyleSheetContainer> Factory::InstanceStyleSheetFile(const String& file_name)
 {
 	auto file_stream = MakeUnique<StreamFile>();
-	file_stream->Open(file_name);
+	file_stream->Open(file_name, FileInterface::MODE_READ);
 	return InstanceStyleSheetStream(file_stream.get());
 }
 

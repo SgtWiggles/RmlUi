@@ -214,7 +214,7 @@ void ElementDocument::ReloadStyleSheet()
 		return;
 
 	auto stream = MakeUnique<StreamFile>();
-	if (!stream->Open(source_url))
+	if (!stream->Open(source_url, FileInterface::MODE_READ))
 	{
 		Log::Message(Log::LT_WARNING, "Failed to open file to reload style sheet in document: %s", source_url.c_str());
 		return;

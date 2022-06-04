@@ -113,7 +113,7 @@ void FontProvider::ReleaseFontResources()
 bool FontProvider::LoadFontFace(const String& file_name, bool fallback_face, Style::FontWeight weight)
 {
 	FileInterface* file_interface = GetFileInterface();
-	FileHandle handle = file_interface->Open(file_name);
+	FileHandle handle = file_interface->Open(file_name, FileInterface::MODE_READ);
 
 	if (!handle)
 	{

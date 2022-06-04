@@ -83,7 +83,7 @@ public:
 				{
 					// Load file into string
 					auto file_interface = Rml::GetFileInterface();
-					Rml::FileHandle handle = file_interface->Open("assets/rml.rcss");
+					Rml::FileHandle handle = file_interface->Open("assets/rml.rcss", Rml::FileInterface::MODE_READ);
 					
 					size_t length = file_interface->Length(handle);
 					style_sheet_content.resize(length);

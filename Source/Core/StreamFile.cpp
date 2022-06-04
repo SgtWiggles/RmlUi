@@ -46,7 +46,7 @@ StreamFile::~StreamFile()
 }
 
 /// Attempts to open the stream pointing at a given URL.
-bool StreamFile::Open(const String& path)
+bool StreamFile::Open(const String& path, FileInterface::OpenMode mode)
 {
 	String url_safe_path = StringUtilities::Replace(path, ':', '|');
 	SetStreamDetails(URL(url_safe_path), Stream::MODE_READ);
@@ -56,7 +56,7 @@ bool StreamFile::Open(const String& path)
 
 	// Fix the path if a leading colon has been replaced with a pipe.
 	String fixed_path = StringUtilities::Replace(path, '|', ':');
-	file_handle = GetFileInterface()->Open(fixed_path);
+	file_handle = GetFileInterface()->Open(fixed_path, mode);
 	if (!file_handle)
 	{
 		Log::Message(Log::LT_WARNING, "Unable to open file %s.", fixed_path.c_str());

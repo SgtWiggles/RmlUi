@@ -262,7 +262,7 @@ ElementDocument* Context::LoadDocument(const String& document_path)
 {	
 	auto stream = MakeUnique<StreamFile>();
 
-	if (!stream->Open(document_path))
+	if (!stream->Open(document_path, FileInterface::MODE_EXEC))
 		return nullptr;
 
 	ElementDocument* document = LoadDocument(stream.get());

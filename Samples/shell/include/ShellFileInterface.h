@@ -44,7 +44,7 @@ public:
 	virtual ~ShellFileInterface();
 
 	/// Opens a file.		
-	Rml::FileHandle Open(const Rml::String& path) override;
+	Rml::FileHandle Open(const Rml::String& path, Rml::FileInterface::OpenMode) override;
 
 	/// Closes a previously opened file.		
 	void Close(Rml::FileHandle file) override;

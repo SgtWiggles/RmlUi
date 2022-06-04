@@ -155,7 +155,7 @@ struct TGAHeader {
 bool RenderInterface_GL2::LoadTexture(Rml::TextureHandle& texture_handle, Rml::Vector2i& texture_dimensions, const Rml::String& source)
 {
 	Rml::FileInterface* file_interface = Rml::GetFileInterface();
-	Rml::FileHandle file_handle = file_interface->Open(source);
+	Rml::FileHandle file_handle = file_interface->Open(source, Rml::FileInterface::MODE_READ);
 	if (!file_handle)
 	{
 		return false;
