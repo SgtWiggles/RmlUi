@@ -15,7 +15,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -34,10 +34,9 @@
 #include "../../Include/RmlUi/Core/FontEngineInterface.h"
 #include "../../Include/RmlUi/Core/Plugin.h"
 #include "../../Include/RmlUi/Core/RenderInterface.h"
-#include "../../Include/RmlUi/Core/SystemInterface.h"
 #include "../../Include/RmlUi/Core/StyleSheetSpecification.h"
+#include "../../Include/RmlUi/Core/SystemInterface.h"
 #include "../../Include/RmlUi/Core/Types.h"
-
 #include "EventSpecification.h"
 #include "FileInterfaceDefault.h"
 #include "GeometryDatabase.h"
@@ -46,22 +45,20 @@
 #include "StyleSheetParser.h"
 #include "TemplateCache.h"
 #include "TextureDatabase.h"
-#include "EventSpecification.h"
 
 #ifndef RMLUI_NO_FONT_INTERFACE_DEFAULT
-#include "FontEngineDefault/FontEngineInterfaceDefault.h"
+	#include "FontEngineDefault/FontEngineInterfaceDefault.h"
 #endif
 
 #ifdef RMLUI_ENABLE_LOTTIE_PLUGIN
-#include "../Lottie/LottiePlugin.h"
+	#include "../Lottie/LottiePlugin.h"
 #endif
 
 #ifdef RMLUI_ENABLE_SVG_PLUGIN
-#include "../SVG/SVGPlugin.h"
+	#include "../SVG/SVGPlugin.h"
 #endif
 
 #include "Pool.h"
-
 
 namespace Rml {
 
@@ -80,7 +77,7 @@ static UniquePtr<FontEngineInterface> default_font_interface;
 
 static bool initialised = false;
 
-using ContextMap = UnorderedMap< String, ContextPtr >;
+using ContextMap = UnorderedMap<String, ContextPtr>;
 static ContextMap contexts;
 
 // The ObserverPtrBlock pool
@@ -90,7 +87,6 @@ extern Pool<ObserverPtrBlock>* observerPtrBlockPool;
 	#define RMLUI_VERSION "custom"
 #endif
 
-
 bool Initialise()
 {
 	RMLUI_ASSERTMSG(!initialised, "Rml::Initialise() called, but RmlUi is already initialised!");
@@ -99,13 +95,13 @@ bool Initialise()
 
 	// Check for valid interfaces, or install default interfaces as appropriate.
 	if (!system_interface)
-	{	
+	{
 		Log::Message(Log::LT_ERROR, "No system interface set!");
 		return false;
 	}
 
 	if (!file_interface)
-	{		
+	{
 #ifndef RMLUI_NO_FILE_INTERFACE_DEFAULT
 		default_file_interface = MakeUnique<FileInterfaceDefault>();
 		file_interface = default_file_interface.get();
@@ -122,8 +118,7 @@ bool Initialise()
 	if (!font_interface)
 	{
 #ifndef RMLUI_NO_FONT_INTERFACE_DEFAULT
-		default_font_interface = MakeUnique<FontEngineInterfaceDefault>();
-		font_interface = default_font_interface.get();
+		font_interface = GetDefaultFontEngineInterface();
 #else
 		Log::Message(Log::LT_ERROR, "No font interface set!");
 		return false;
@@ -236,11 +231,25 @@ void SetFontEngineInterface(FontEngineInterface* _font_interface)
 {
 	font_interface = _font_interface;
 }
-	
+
 // Returns RmlUi's file interface.
 FontEngineInterface* GetFontEngineInterface()
 {
 	return font_interface;
+}
+
+// Returns RmlUi's default font interface, will be nullptr if the default font engine interface is disabled
+RMLUICORE_API FontEngineInterface* GetDefaultFontEngineInterface()
+{
+#ifndef RMLUI_NO_FONT_INTERFACE_DEFAULT
+	if (!default_font_interface)
+	{
+		default_font_interface = MakeUnique<FontEngineInterfaceDefault>();
+	}
+	return default_font_interface.get();
+#else
+	return nullptr;
+#endif
 }
 
 // Creates a new element context.
@@ -251,7 +260,8 @@ Context* CreateContext(const String& name, const Vector2i dimensions, RenderInte
 
 	if (!custom_render_interface && !render_interface)
 	{
-		Log::Message(Log::LT_WARNING, "Failed to create context '%s', no render interface specified and no default render interface exists.", name.c_str());
+		Log::Message(Log::LT_WARNING, "Failed to create context '%s', no render interface specified and no default render interface exists.",
+			name.c_str());
 		return nullptr;
 	}
 
@@ -310,7 +320,7 @@ Context* GetContext(int index)
 {
 	ContextMap::iterator i = contexts.begin();
 	int count = 0;
-	
+
 	if (index < 0 || index >= GetNumContexts())
 		return nullptr;
 
@@ -329,7 +339,7 @@ Context* GetContext(int index)
 // Returns the number of active contexts.
 int GetNumContexts()
 {
-	return (int) contexts.size();
+	return (int)contexts.size();
 }
 
 bool LoadFontFace(const String& file_name, bool fallback_face, Style::FontWeight weight)
@@ -356,7 +366,7 @@ void UnregisterPlugin(Plugin* plugin)
 {
 	PluginRegistry::UnregisterPlugin(plugin);
 
-	if(initialised)
+	if (initialised)
 		plugin->OnShutdown();
 }
 

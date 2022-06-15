@@ -56,6 +56,8 @@ RMLUICORE_API bool Initialise();
 /// Shutdown RmlUi.
 RMLUICORE_API void Shutdown();
 
+
+
 /// Returns the version of this RmlUi library.
 /// @return The version number.
 RMLUICORE_API String GetVersion();
@@ -91,6 +93,9 @@ RMLUICORE_API FileInterface* GetFileInterface();
 RMLUICORE_API void SetFontEngineInterface(FontEngineInterface* font_interface);
 /// Returns RmlUi's font interface.
 RMLUICORE_API FontEngineInterface* GetFontEngineInterface();
+
+// Returns RmlUi's default font interface, will be nullptr if the default font engine interface is disabled
+RMLUICORE_API FontEngineInterface* GetDefaultFontEngineInterface();
 	
 /// Creates a new element context.
 /// @param[in] name The new name of the context. This must be unique.
