@@ -82,7 +82,7 @@ SharedPtr<TextureResource> TextureDatabase::Fetch(const String& source, const St
 	if (source.size() > 0 && source[0] == '?')
 		path = source;
 	else
-		GetSystemInterface()->JoinPath(path, StringUtilities::Replace(source_directory, '|', ':'), source);
+		GetSystemInterface()->JoinPath(path, source_directory, source);
 
 	auto iterator = texture_database->textures.find(path);
 	if (iterator != texture_database->textures.end())

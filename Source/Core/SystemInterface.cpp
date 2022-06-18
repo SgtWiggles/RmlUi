@@ -125,8 +125,8 @@ void SystemInterface::JoinPath(String& translated_path, const String& document_p
 		translated_path.clear();
 
 	// Append the paths and send through URL to removing any '..'.
-	String url = Replace(translated_path, ':', '|') + Replace(path, '\\', '/');
-	translated_path = Replace(url, '|', ':');
+	String url = translated_path + path;
+	translated_path = url;
 }
 
 void SystemInterface::ActivateKeyboard(Rml::Vector2f /*caret_position*/, float /*line_height*/) {}
