@@ -49,7 +49,7 @@ StreamFile::~StreamFile()
 bool StreamFile::Open(const String& path, FileInterface::OpenMode mode)
 {
 	String url_safe_path = StringUtilities::Replace(path, ':', '|');
-	SetStreamDetails(URL(url_safe_path), Stream::MODE_READ);
+	SetStreamDetails(String(url_safe_path), Stream::MODE_READ);
 
 	if (file_handle)
 		Close();

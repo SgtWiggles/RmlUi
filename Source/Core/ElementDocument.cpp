@@ -79,7 +79,7 @@ void ElementDocument::ProcessHeader(const DocumentHeader* document_header)
 	// Merge in any templates, note a merge may cause more templates to merge
 	for (size_t i = 0; i < header.template_resources.size(); i++)
 	{
-		Template* merge_template = TemplateCache::LoadTemplate(URL(header.template_resources[i]).GetURL());	
+		Template* merge_template = TemplateCache::LoadTemplate(String(header.template_resources[i]));	
 
 		if (merge_template)
 			header.MergeHeader(*merge_template->GetHeader());

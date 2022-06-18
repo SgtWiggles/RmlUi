@@ -209,7 +209,7 @@ bool StreamMemory::IsWriteReady()
 	return true;
 }
 
-void StreamMemory::SetSourceURL(const URL& url)
+void StreamMemory::SetSourceURL(const String& url)
 {
 	SetStreamDetails(url, Stream::MODE_READ | (owns_buffer ? Stream::MODE_WRITE : 0));
 }

@@ -516,7 +516,7 @@ bool StyleSheetParser::Parse(MediaBlockList& style_sheets, Stream* _stream, int 
 	int rule_count = 0;
 	line_number = begin_line_number;
 	stream = _stream;
-	stream_file_name = StringUtilities::Replace(stream->GetSourceURL().GetURL(), '|', ':');
+	stream_file_name = StringUtilities::Replace(stream->GetSourceURL(), '|', ':');
 
 	enum class State { Global, AtRuleIdentifier, KeyframeBlock, Invalid };
 	State state = State::Global;

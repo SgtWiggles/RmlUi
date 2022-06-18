@@ -36,7 +36,6 @@
 namespace Rml {
 
 class Stream;
-class URL;
 using XMLAttributes = Dictionary;
 
 enum class XMLDataType { Text, CData, InnerXML };
@@ -82,10 +81,10 @@ class RMLUICORE_API BaseXMLParser
 		virtual void HandleData(const String& data, XMLDataType type);
 
 	protected:
-		const URL* GetSourceURLPtr() const;
+		const String* GetSourceURLPtr() const;
 
 	private:
-		const URL* source_url = nullptr;
+		const String* source_url = nullptr;
 		String xml_source;
 		size_t xml_index = 0;
 

@@ -273,7 +273,7 @@ ElementDocument* Context::LoadDocument(const String& document_path)
 // Load a document into the context.
 ElementDocument* Context::LoadDocument(Stream* stream)
 {
-	PluginRegistry::NotifyDocumentOpen(this, stream->GetSourceURL().GetURL());
+	PluginRegistry::NotifyDocumentOpen(this, stream->GetSourceURL());
 
 	ElementPtr element = Factory::InstanceDocumentStream(this, stream, GetDocumentsBaseTag());
 	if (!element)

@@ -33,7 +33,6 @@
 #include "../../../Include/RmlUi/Core/GeometryUtilities.h"
 #include "../../../Include/RmlUi/Core/PropertyIdSet.h"
 #include "../../../Include/RmlUi/Core/StyleSheet.h"
-#include "../../../Include/RmlUi/Core/URL.h"
 #include "../TextureDatabase.h"
 
 namespace Rml {
@@ -271,12 +270,12 @@ bool ElementImage::LoadTexture()
 			return false;
 		}
 
-		URL source_url;
+		String source_url;
 
 		if (ElementDocument* document = GetOwnerDocument())
-			source_url.SetURL(document->GetSourceURL());
+			source_url = document->GetSourceURL();
 
-		texture.Set(source_name, source_url.GetPath());
+		texture.Set(source_name, source_url);
 
 		dimensions_scale = dp_ratio;
 	}

@@ -56,7 +56,7 @@ int Stream::GetStreamMode() const
 }
 
 // Returns the source url (if available)
-const URL& Stream::GetSourceURL() const
+const String& Stream::GetSourceURL() const
 {
 	return url;
 }
@@ -153,7 +153,7 @@ size_t Stream::PopBack(size_t bytes)
 }
 
 // Sets the mode on the stream; should be called by a stream when it is opened.
-void Stream::SetStreamDetails(const URL& _url, int _stream_mode)
+void Stream::SetStreamDetails(const String& _url, int _stream_mode)
 {
 	url = _url;
 	stream_mode = _stream_mode;

@@ -32,7 +32,6 @@
 #include "../../Include/RmlUi/Core/Stream.h"
 #include "../../Include/RmlUi/Core/Types.h"
 #include "../../Include/RmlUi/Core/XMLNodeHandler.h"
-#include "../../Include/RmlUi/Core/URL.h"
 #include "../../Include/RmlUi/Core/XMLParser.h"
 #include "../../Include/RmlUi/Core/Factory.h"
 
@@ -122,7 +121,7 @@ const XMLParser::ParseFrame* XMLParser::GetParseFrame() const
 	return &stack.top();
 }
 
-const URL& XMLParser::GetSourceURL() const
+const String& XMLParser::GetSourceURL() const
 {
 	RMLUI_ASSERT(GetSourceURLPtr());
 	return *GetSourceURLPtr();
@@ -175,7 +174,7 @@ void XMLParser::HandleElementEnd(const String& _name)
 	// Check frame names
 	if (name != frame.tag)
 	{
-		Log::Message(Log::LT_ERROR, "Closing tag '%s' mismatched on %s:%d was expecting '%s'.", name.c_str(), GetSourceURL().GetURL().c_str(), GetLineNumber(), frame.tag.c_str());
+		Log::Message(Log::LT_ERROR, "Closing tag '%s' mismatched on %s:%d was expecting '%s'.", name.c_str(), GetSourceURL().c_str(), GetLineNumber(), frame.tag.c_str());
 	}
 
 	// Call element end handler

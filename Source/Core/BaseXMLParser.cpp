@@ -117,7 +117,7 @@ void BaseXMLParser::HandleData(const String& RMLUI_UNUSED_PARAMETER(data), XMLDa
 
 /// Returns the source URL of this parse. Only valid during parsing.
 
-const URL* BaseXMLParser::GetSourceURLPtr() const
+const String* BaseXMLParser::GetSourceURLPtr() const
 {
 	return source_url;
 }
@@ -212,7 +212,7 @@ void BaseXMLParser::ReadBody()
 	// Check for error conditions
 	if (open_tag_depth > 0)
 	{
-		Log::Message(Log::LT_WARNING, "XML parse error on line %d of %s.", GetLineNumber(), source_url->GetURL().c_str());
+		Log::Message(Log::LT_WARNING, "XML parse error on line %d of %s.", GetLineNumber(), source_url->c_str());
 	}
 }
 

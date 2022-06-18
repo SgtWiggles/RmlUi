@@ -38,7 +38,6 @@ namespace Rml {
 class DocumentHeader;
 class Element;
 class XMLNodeHandler;
-class URL;
 
 /**
 	RmlUi's XML parsing engine. The factory creates an instance of this class for each RML parse.
@@ -95,7 +94,7 @@ public:
 	const ParseFrame* GetParseFrame() const;
 
 	/// Returns the source URL of this parse.
-	const URL& GetSourceURL() const;
+	const String& GetSourceURL() const;
 
 protected:
 	/// Called when the parser finds the beginning of an element tag.

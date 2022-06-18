@@ -35,7 +35,6 @@
 #include "../../Include/RmlUi/Core/StringUtilities.h"
 #include "../../Include/RmlUi/Core/SystemInterface.h"
 #include "../../Include/RmlUi/Core/XMLParser.h"
-#include "../../Include/RmlUi/Core/URL.h"
 
 namespace Rml {
 
@@ -51,7 +50,7 @@ static DocumentHeader::Resource MakeInlineResource(XMLParser* parser, const Stri
 	DocumentHeader::Resource resource;
 	resource.is_inline = true;
 	resource.content = data;
-	resource.path = parser->GetSourceURL().GetURL();
+	resource.path = parser->GetSourceURL();
 	resource.line = parser->GetLineNumberOpenTag();
 	return resource;
 }
@@ -60,7 +59,7 @@ static DocumentHeader::Resource MakeExternalResource(XMLParser* parser, const St
 {
 	DocumentHeader::Resource resource;
 	resource.is_inline = false;
-	resource.path = Absolutepath(path, parser->GetSourceURL().GetURL());
+	resource.path = Absolutepath(path, parser->GetSourceURL());
 	return resource;
 }
 
@@ -77,7 +76,7 @@ Element* XMLNodeHandlerHead::ElementStart(XMLParser* parser, const String& name,
 	if (name == "head")
 	{
 		// Process the head attribute
-		parser->GetDocumentHeader()->source = parser->GetSourceURL().GetURL();
+		parser->GetDocumentHeader()->source = parser->GetSourceURL();
 	}
 
 	// Is it a link tag?
@@ -104,12 +103,12 @@ Element* XMLNodeHandlerHead::ElementStart(XMLParser* parser, const String& name,
 
 			else
 			{
-				Log::ParseError(parser->GetSourceURL().GetURL(), parser->GetLineNumber(), "Invalid link type '%s'", type.c_str());
+				Log::ParseError(parser->GetSourceURL(), parser->GetLineNumber(), "Invalid link type '%s'", type.c_str());
 			}
 		}
 		else
 		{
-			Log::ParseError(parser->GetSourceURL().GetURL(), parser->GetLineNumber(), "Link tag requires type and href attributes");
+			Log::ParseError(parser->GetSourceURL(), parser->GetLineNumber(), "Link tag requires type and href attributes");
 		}
 	}
 

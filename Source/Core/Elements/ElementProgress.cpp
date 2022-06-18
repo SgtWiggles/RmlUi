@@ -35,7 +35,6 @@
 #include "../../../Include/RmlUi/Core/Math.h"
 #include "../../../Include/RmlUi/Core/PropertyIdSet.h"
 #include "../../../Include/RmlUi/Core/StyleSheet.h"
-#include "../../../Include/RmlUi/Core/URL.h"
 #include <algorithm>
 
 namespace Rml {
@@ -385,9 +384,9 @@ bool ElementProgress::LoadTexture()
 		// Otherwise, treat it as a path
 		if (!texture_set)
 		{
-			URL source_url;
-			source_url.SetURL(document->GetSourceURL());
-			texture.Set(name, source_url.GetPath());
+			String source_url;
+			source_url = document->GetSourceURL();
+			texture.Set(name, source_url);
 			texture_set = true;
 		}
 	}
