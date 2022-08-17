@@ -44,6 +44,7 @@ static SharedPtr<XMLNodeHandler> default_node_handler;
 XMLParser::XMLParser(Element* root)
 {
 	RegisterCDATATag("script");
+	RegisterCDATATag("style");
 
 	for (const String& name : Factory::GetStructuralDataViewAttributeNames())
 		RegisterInnerXMLAttribute(name);

@@ -26,49 +26,27 @@
  *
  */
 
-#include "StyleSheetNodeSelectorNthChild.h"
-#include "../../Include/RmlUi/Core/ElementText.h"
-#include "../../Include/RmlUi/Core/Log.h"
+#include "EventListener.h"
+#include "EventManager.h"
 
-namespace Rml {
-
-StyleSheetNodeSelectorNthChild::StyleSheetNodeSelectorNthChild()
+EventListener::EventListener(const Rml::String& value) : value(value)
 {
 }
 
-StyleSheetNodeSelectorNthChild::~StyleSheetNodeSelectorNthChild()
+EventListener::~EventListener()
 {
 }
 
-// Returns true if the element index is (n * a) + b for a given integer value of n.
-bool StyleSheetNodeSelectorNthChild::IsApplicable(const Element* element, int a, int b)
+// Sends the event value through to Invader's event processing system.
+void EventListener::ProcessEvent(Rml::Event& event)
 {
-	Element* parent = element->GetParentNode();
-	if (parent == nullptr)
-		return false;
-
-	// Start counting elements until we find this one.
-	int element_index = 1;
-	for (int i = 0; i < parent->GetNumChildren(); i++)
-	{
-		Element* child = parent->GetChild(i);
-
-		// Skip text nodes.
-		if (rmlui_dynamic_cast< ElementText* >(child) != nullptr)
-			continue;
-
-		// If we've found our element, then break; the current index is our element's index.
-		if (child == element)
-			break;
-
-		// Skip nodes without a display type.
-		if (child->GetDisplay() == Style::Display::None)
-			continue;
-
-		element_index++;
-	}
-
-	return IsNth(a, b, element_index);
+	EventManager::ProcessEvent(event, value);
 }
 
-} // namespace Rml
+// Destroys the event.
+void EventListener::OnDetach(Rml::Element* RMLUI_UNUSED_PARAMETER(element))
+{
+	RMLUI_UNUSED(element);
+
+	delete this;
+}

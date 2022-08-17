@@ -26,28 +26,29 @@
  *
  */
 
-#ifndef RMLUI_CORE_STYLESHEETNODESELECTORLASTCHILD_H
-#define RMLUI_CORE_STYLESHEETNODESELECTORLASTCHILD_H
+#ifndef RMLUI_INVADERS_EVENTLISTENER_H
+#define RMLUI_INVADERS_EVENTLISTENER_H
 
-#include "StyleSheetNodeSelector.h"
-
-namespace Rml {
+#include <RmlUi/Core/EventListener.h>
 
 /**
-	A node selector for the last generic child.
-
 	@author Peter Curry
  */
 
-class StyleSheetNodeSelectorLastChild : public StyleSheetNodeSelector
+class EventListener : public Rml::EventListener
 {
 public:
-	StyleSheetNodeSelectorLastChild();
-	virtual ~StyleSheetNodeSelectorLastChild();
+	EventListener(const Rml::String& value);
+	virtual ~EventListener();
 
-	// Returns true if the element is the last DOM child in its parent.
-	bool IsApplicable(const Element* element, int a, int b) override;
+	/// Sends the event value through to Invader's event processing system.
+	void ProcessEvent(Rml::Event& event) override;
+
+	/// Destroys the event.
+	void OnDetach(Rml::Element* element) override;
+
+private:
+	Rml::String value;
 };
 
-} // namespace Rml
 #endif

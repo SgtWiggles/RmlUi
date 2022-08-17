@@ -15,7 +15,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,47 +26,59 @@
  *
  */
 
-#include "StyleSheetNodeSelectorOnlyOfType.h"
-#include "../../Include/RmlUi/Core/ElementText.h"
+#include "../Common/TestsShell.h"
+#include <RmlUi/Core/Context.h>
+#include <RmlUi/Core/Core.h>
+#include <RmlUi/Core/ElementDocument.h>
+#include <RmlUi/Debugger.h>
+#include <algorithm>
+#include <doctest.h>
 
-namespace Rml {
+using namespace Rml;
 
-StyleSheetNodeSelectorOnlyOfType::StyleSheetNodeSelectorOnlyOfType()
+TEST_CASE("debugger")
 {
-}
+	Context* context = TestsShell::GetContext(false);
 
-StyleSheetNodeSelectorOnlyOfType::~StyleSheetNodeSelectorOnlyOfType()
-{
-}
-
-// Returns true if the element is the only DOM child of its parent of its type.
-bool StyleSheetNodeSelectorOnlyOfType::IsApplicable(const Element* element, int RMLUI_UNUSED_PARAMETER(a), int RMLUI_UNUSED_PARAMETER(b))
-{
-	RMLUI_UNUSED(a);
-	RMLUI_UNUSED(b);
-
-	Element* parent = element->GetParentNode();
-	if (parent == nullptr)
-		return false;
-
-	for (int i = 0; i < parent->GetNumChildren(); ++i)
+	SUBCASE("no_shutdown")
 	{
-		Element* child = parent->GetChild(i);
+		Rml::Debugger::Initialise(context);
 
-		// Skip the child if it is our element.
-		if (child == element)
-			continue;
+		ElementDocument* document = context->LoadDocument("assets/demo.rml");
+		TestsShell::RenderLoop();
 
-		// Skip the child if it does not share our tag.
-		if (child->GetTagName() != element->GetTagName() ||
-			child->GetDisplay() == Style::Display::None)
-			continue;
-
-		// We've found a similarly-tagged child to our element; selector fails.
-		return false;
+		document->Close();
+		TestsShell::RenderLoop();
 	}
 
-	return true;
-}
+	SUBCASE("shutdown")
+	{
+		Rml::Debugger::Initialise(context);
 
-} // namespace Rml
+		ElementDocument* document = context->LoadDocument("assets/demo.rml");
+		TestsShell::RenderLoop();
+
+		document->Close();
+		TestsShell::RenderLoop();
+
+		Rml::Debugger::Shutdown();
+		TestsShell::RenderLoop();
+	}
+
+	SUBCASE("shutdown_early")
+	{
+		ElementDocument* document = context->LoadDocument("assets/demo.rml");
+		TestsShell::RenderLoop();
+
+		Rml::Debugger::Initialise(context);
+		TestsShell::RenderLoop();
+
+		Rml::Debugger::Shutdown();
+		TestsShell::RenderLoop();
+
+		document->Close();
+		TestsShell::RenderLoop();
+	}
+
+	TestsShell::ShutdownShell();
+}

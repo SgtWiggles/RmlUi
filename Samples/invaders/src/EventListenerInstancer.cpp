@@ -26,47 +26,19 @@
  *
  */
 
-#include "StyleSheetNodeSelectorLastChild.h"
-#include "../../Include/RmlUi/Core/ElementText.h"
+#include "EventListenerInstancer.h"
+#include "EventListener.h"
 
-namespace Rml {
-
-StyleSheetNodeSelectorLastChild::StyleSheetNodeSelectorLastChild()
+EventListenerInstancer::EventListenerInstancer()
 {
 }
 
-StyleSheetNodeSelectorLastChild::~StyleSheetNodeSelectorLastChild()
+EventListenerInstancer::~EventListenerInstancer()
 {
 }
 
-// Returns true if the element is the last DOM child in its parent.
-bool StyleSheetNodeSelectorLastChild::IsApplicable(const Element* element, int RMLUI_UNUSED_PARAMETER(a), int RMLUI_UNUSED_PARAMETER(b))
+// Instances a new event handle for Invaders.
+Rml::EventListener* EventListenerInstancer::InstanceEventListener(const Rml::String& value, Rml::Element* /*element*/)
 {
-	RMLUI_UNUSED(a);
-	RMLUI_UNUSED(b);
-
-	Element* parent = element->GetParentNode();
-	if (parent == nullptr)
-		return false;
-
-	int child_index = parent->GetNumChildren() - 1;
-	while (child_index >= 0)
-	{
-		// If this child (the last non-text child) is our element, then the selector succeeds.
-		Element* child = parent->GetChild(child_index);
-		if (child == element)
-			return true;
-
-		// If this child is not a text element, then the selector fails; this element is non-trivial.
-		if (rmlui_dynamic_cast< ElementText* >(child) == nullptr &&
-			child->GetDisplay() != Style::Display::None)
-			return false;
-
-		// Otherwise, skip over the text element to find the last non-trivial element.
-		child_index--;
-	}
-
-	return false;
+	return new EventListener(value);
 }
-
-} // namespace Rml

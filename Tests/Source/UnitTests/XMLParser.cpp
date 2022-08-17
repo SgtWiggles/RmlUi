@@ -15,7 +15,7 @@
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,47 +26,52 @@
  *
  */
 
-#include "StyleSheetNodeSelectorLastOfType.h"
-#include "../../Include/RmlUi/Core/Element.h"
+#include "../Common/TestsShell.h"
+#include <RmlUi/Core/ComputedValues.h>
+#include <RmlUi/Core/Context.h>
+#include <RmlUi/Core/Element.h>
+#include <RmlUi/Core/ElementDocument.h>
+#include <RmlUi/Core/Factory.h>
+#include <doctest.h>
 
-namespace Rml {
+using namespace Rml;
 
-StyleSheetNodeSelectorLastOfType::StyleSheetNodeSelectorLastOfType()
+static const String document_xml_tags_in_css = R"(
+<rml>
+    <head>
+        <style>
+            body {
+                /* <body> */
+                width: 200px;
+                height: 200px;
+                background-color: #00ff00;
+            }
+        </style>
+    </head>
+    <body>
+    </body>
+</rml>
+)";
+
+TEST_CASE("XMLParser")
 {
+	Context* context = TestsShell::GetContext();
+	REQUIRE(context);
+
+	// Style nodes should accept XML reserved characters, see https://github.com/mikke89/RmlUi/issues/341
+
+	ElementDocument* document = context->LoadDocumentFromMemory(document_xml_tags_in_css);
+	REQUIRE(document);
+	document->Show();
+
+	TestsShell::RenderLoop();
+
+	const Colourb background = document->GetComputedValues().background_color();
+	CHECK(background.red == 0);
+	CHECK(background.green == 0xff);
+	CHECK(background.blue == 0);
+	CHECK(background.alpha == 0xff);
+
+	document->Close();
+	TestsShell::ShutdownShell();
 }
-
-StyleSheetNodeSelectorLastOfType::~StyleSheetNodeSelectorLastOfType()
-{
-}
-
-// Returns true if the element is the last DOM child in its parent.
-bool StyleSheetNodeSelectorLastOfType::IsApplicable(const Element* element, int RMLUI_UNUSED_PARAMETER(a), int RMLUI_UNUSED_PARAMETER(b))
-{
-	RMLUI_UNUSED(a);
-	RMLUI_UNUSED(b);
-
-	Element* parent = element->GetParentNode();
-	if (parent == nullptr)
-		return false;
-
-	int child_index = parent->GetNumChildren() - 1;
-	while (child_index >= 0)
-	{
-		// If this child is our element, then it's the first one we've found with our tag; the selector succeeds.
-		Element* child = parent->GetChild(child_index);
-		if (child == element)
-			return true;
-
-		// Otherwise, if this child shares our element's tag, then our element is not the first tagged child; the
-		// selector fails.
-		if (child->GetTagName() == element->GetTagName() &&
-			child->GetDisplay() != Style::Display::None)
-			return false;
-
-		child_index--;
-	}
-
-	return false;
-}
-
-} // namespace Rml

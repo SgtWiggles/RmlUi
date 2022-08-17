@@ -38,25 +38,61 @@ The `<textarea>` and `<input type="text">` elements have been improved in severa
 - Fixed an issue where Windows newline endings (\r\n) would produce an excessive space character.
 - Fixed operation of page up/down numpad keys being swapped.
 - The input method editor (IME) is now positioned at the caret during text editing on the Windows backend. #303 #305 (thanks @xland)
+- Fix slow input handling especially with CJK input on the Win32 backend. #311
+- Improve performance on construction and during text editing.
+
+### RCSS selectors
+
+- Implemented the next-sibling `+` and subsequent-sibling `~` [combinators](https://mikke89.github.io/RmlUiDoc/pages/rcss/selectors.html).
+- Implemented attribute selectors `[foo]`, `[foo=bar]`, `[foo~=bar]`, `[foo|=bar]`, `[foo^=bar]`, `[foo$=bar]`, `[foo*=bar]`. #240 (thanks @aquawicket)
+- Implemented the negation pseudo class `:not()`, including support for selector lists `E:not(s1, s2, ...)`.
+- Refactored structural pseudo classes for improved performance.
+- Selectors will no longer match any text elements, like in CSS.
+- Selectors more correctly consider all paths toward the root, not just the first greedy path.
+- Structural selectors are no longer affected by the element's display property, like in CSS.
+
+### RCSS properties
+
+- `max-width` and `max-height` properties now support the `none` keyword.
+
+### Data binding
+
+- Transform functions can now be called using C-like calling conventions, in addition to the previous pipe-syntax. Thus, the data expression `3.625 | format(2)` can now be identically expressed as `format(3.625, 2)`.
 
 ### Lua plugin
 
+- Add `QuerySelector` and `QuerySelectorAll` to the Lua Element API. #329 (thanks @Dakror)
+- Lua objects representing C++ pointers now compare equal if they point to the same object. #330 (thanks @Dakror)
 - Add length to proxy for element children. #315 (thanks @nimble0)
+- Fix crash in Lua plugin during garbage collection. #340 (thanks @slipher)
 
 ### Layout improvements
 
 - Scroll and slider elements now use containing block's height instead of width to calculate height-relative values. #314 #321 (thanks @nimble0)
 - Generate warnings when directly nesting flexboxes and other unsupported elements in a top-level formatting context. #320
+- In some situations, changing the `top`/`right`/`bottom`/`left` properties may affect the element's size. These situations are now correctly handled and the layout is updated when needed.
+
+### Context input
+
+- The hover state of any elements under the mouse will now automatically be updated during `Context::Update()`. #220
+- Added `Context::ProcessMouseLeave()` which ensures that the hovered state is removed from all elements and stops the context update from automatically hovering elements.
+- When `Context::ProcessMouseMove()` is called next the context update will start updating hover states again.
+- Added support for mouse leave events on all backends.
 
 ### General fixes
 
+- Font textures are no longer being regenerated when encountering new ascii characters, fixes a recent regression.
 - `<img>` element: Fix wrong dp-scaling being applied when an image is cloned through a parent element. #310
-- Win32 backend: Fix slow input handling especially with CJK input. #311
 - Logging a message without an installed system interface will now be written to cout instead of crashing the application.
+- Fixed a crash when the debugger plugin was shutdown manually. #322 #323 (thanks @LoneBoco)
+- Fix compilation on Emscripten CI. #335 (thanks @hobyst)
 
 ### Breaking changes
 
 - Changed the signature of the keyboard activation in the system interface, it now passes the caret position and line height: `SystemInterface::ActivateKeyboard(Rml::Vector2f caret_position, float line_height)`.
+- Removed the boolean result returned from `Rml::Debugger::Shutdown()`.
+- RCSS selectors will no longer match text elements, structural pseudo selectors are no longer affected by the element's display property.
+- Data binding: The signature of transform functions has been changed from `Variant& first_argument_and_result, const VariantList& other_arguments -> bool success` to `const VariantList& arguments -> Variant result`.
 
 
 ## RmlUi 4.4

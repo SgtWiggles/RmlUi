@@ -32,6 +32,7 @@
 #include "../../../Include/RmlUi/Core/EventListener.h"
 #include "../../../Include/RmlUi/Core/Geometry.h"
 #include "../../../Include/RmlUi/Core/Vertex.h"
+#include <float.h>
 
 namespace Rml {
 
@@ -68,6 +69,8 @@ public:
 	void UpdateSelectionColours();
 	/// Generates the text cursor.
 	void GenerateCursor();
+	/// Force text formatting on the next layout update.
+	void ForceFormattingOnNextLayout();
 
 	/// Updates the cursor, if necessary.
 	void OnUpdate();
@@ -77,11 +80,6 @@ public:
 	void OnLayout();
 	/// Called when the parent element's size changes.
 	void OnResize();
-
-	/// Returns the input element's underlying text element.
-	ElementText* GetTextElement();
-	/// Returns the input element's maximum allowed text dimensions.
-	Vector2f GetTextDimensions() const;
 
 protected:
 	enum class CursorMovement { Begin = -4, BeginLine = -3, PreviousWord = -2, Left = -1, Right = 1, NextWord = 2, EndLine = 3, End = 4 };
@@ -123,11 +121,13 @@ private:
 	/// Moves the cursor along the current line.
 	/// @param[in] movement Cursor movement operation.
 	/// @param[in] select True if the movement will also move the selection cursor, false if not.
-	void MoveCursorHorizontal(CursorMovement movement, bool select);
+	/// @return True if selection was changed.
+	bool MoveCursorHorizontal(CursorMovement movement, bool select);
 	/// Moves the cursor up and down the text field.
 	/// @param[in] x How far to move the cursor.
 	/// @param[in] select True if the movement will also move the selection cursor, false if not.
-	void MoveCursorVertical(int distance, bool select);
+	/// @return True if selection was changed.
+	bool MoveCursorVertical(int distance, bool select);
 	// Move the cursor to utf-8 boundaries, in case it was moved into the middle of a multibyte character.
 	/// @param[in] forward True to seek forward, else back.
 	void MoveCursorToCharacterBoundaries(bool forward);
@@ -158,8 +158,9 @@ private:
 	/// Formats the element, laying out the text and inserting scrollbars as appropriate.
 	void FormatElement();
 	/// Formats the input element's text field.
+	/// @param[in] height_constraint Abort formatting when the formatted size grows larger than this height.
 	/// @return The content area of the element.
-	Vector2f FormatText();
+	Vector2f FormatText(float height_constraint = FLT_MAX);
 
 	/// Updates the position to render the cursor.
 	/// @param[in] update_ideal_cursor_position Generally should be true on horizontal movement and false on vertical movement.
@@ -167,9 +168,11 @@ private:
 
 	/// Expand or shrink the text selection to the position of the cursor.
 	/// @param[in] selecting True if the new position of the cursor should expand / contract the selection area, false if it should only set the anchor for future selections.
-	void UpdateSelection(bool selecting);
+	/// @return True if selection was changed.
+	bool UpdateSelection(bool selecting);
 	/// Removes the selection of text.
-	void ClearSelection();
+	/// @return True if selection was changed.
+	bool ClearSelection();
 	/// Deletes all selected text and removes the selection.
 	void DeleteSelection();
 	/// Copies the selection (if any) to the clipboard.
@@ -216,6 +219,7 @@ private:
 
 	bool ideal_cursor_position_to_the_right_of_cursor;
 	bool cancel_next_drag;
+	bool force_formatting_on_next_layout;
 
 	// Selection. The start and end indices of the selection are in absolute coordinates.
 	Element* selection_element;
